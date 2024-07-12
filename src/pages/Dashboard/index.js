@@ -58,6 +58,23 @@ const Dashboard = () => {
         setDataDetail(constant.defaultDetail)
     }
 
+    const onClickEdit = () => {
+        const bodyRequest = JSON.stringify(dataDetail)
+        fetch(`https://fakestoreapi.com/users/${dataDetail.id}`,{
+            method:"PUT",
+            body: bodyRequest
+        })
+        .then((response) => response.json())
+        .then((response) => {
+            setShowEdit(false)
+            setDataDetail(constant.defaultDetail)
+            setTimeout(() => {
+                window.alert("Edit Successful!")
+            }, 500)
+        })
+        .catch((error) => window.alert(error))
+    }
+
     useEffect(() => {
         callApiGetUsers()
     }, [])
@@ -101,7 +118,7 @@ const Dashboard = () => {
                     </tbody>
                 </table>
             </div>
-            <ReactModal contentLabel="Detail User" isOpen={showDetail} className="modal_content">
+            <ReactModal contentLabel="Detail User" isOpen={showDetail} className="modal_content" id="modal_content">
                 <p className="modal_body">ID: {dataDetail.id}</p>
                 <p className="modal_body">Email: {dataDetail.email}</p>
                 <p className="modal_body">Username: {dataDetail.username}</p>
@@ -112,16 +129,61 @@ const Dashboard = () => {
                 <p className="modal_body">Phone: {dataDetail.phone}</p>
                 <button className="button_close" onClick={() => onClickCloseDetail()}>Close</button>
             </ReactModal>
-            <ReactModal contentLabel="Edit User" isOpen={showEdit} className="modal_content">
+            <ReactModal contentLabel="Edit User" isOpen={showEdit} className="modal_content" id="modal_content">
                 <p className="modal_body">ID: {dataDetail.id}</p>
-                <p className="modal_body">Email: {dataDetail.email}</p>
-                <p className="modal_body">Username: {dataDetail.username}</p>
-                <p className="modal_body">Password: {dataDetail.password}</p>
-                <p className="modal_body">First Name: {dataDetail.name.firstname}</p>
-                <p className="modal_body">Last Name: {dataDetail.name.lastname}</p>
+                <p className="modal_body">Email:&nbsp;
+                    <input 
+                        className={'inputBox'}
+                        onChange={(e) => {
+                            setDataDetail({...dataDetail, email: e.target.value})
+                        }}
+                        value={dataDetail.email}/>
+                </p>
+                <p className="modal_body">Username:&nbsp;
+                    <input 
+                        className={'inputBox'}
+                        onChange={(e) => {
+                            setDataDetail({...dataDetail, username: e.target.value})
+                        }}
+                        value={dataDetail.username}/>
+                </p>
+                <p className="modal_body">Password:&nbsp;
+                    <input 
+                        className={'inputBox'}
+                        onChange={(e) => {
+                            setDataDetail({...dataDetail, password: e.target.value})
+                        }}
+                        value={dataDetail.password}/>
+                </p>
+                <p className="modal_body">First Name:&nbsp;
+                    <input 
+                        className={'inputBox'}
+                        onChange={(e) => {
+                            setDataDetail({...dataDetail, name:{ ...dataDetail.name, firstname: e.target.value}})
+                        }}
+                        value={dataDetail.name.firstname}/>
+                </p>
+                <p className="modal_body">Last Name:&nbsp;
+                    <input 
+                        className={'inputBox'}
+                        onChange={(e) => {
+                            setDataDetail({...dataDetail, name:{ ...dataDetail.name, lastname: e.target.value}})
+                        }}
+                        value={dataDetail.name.lastname}/>
+                </p>
                 <p className="modal_body">Address: {dataDetail.address.street}, {dataDetail.address.number}, {dataDetail.address.city}, {dataDetail.address.zipcode}</p>
-                <p className="modal_body">Phone: {dataDetail.phone}</p>
-                <button className="button_close" onClick={() => onClickCloseEdit()}>Close</button>
+                <p className="modal_body">Phone:&nbsp;
+                    <input 
+                        className={'inputBox'}
+                        onChange={(e) => {
+                            setDataDetail({...dataDetail, phone: e.target.value})
+                        }}
+                        value={dataDetail.phone}/>
+                </p>
+                <div className="modal_button">
+                    <button className="button_close" onClick={() => onClickEdit()}>Save Edit</button>&nbsp;&nbsp;
+                    <button className="button_close" onClick={() => onClickCloseEdit()}>Close</button>
+                </div>
             </ReactModal>
         </div>
         </>

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import './style.css';
 
 const Login = () => {
+    const navigate = useNavigate();
     const [formBody, setFormBody] = useState({
         username: undefined,
         password: undefined,
@@ -41,7 +43,7 @@ const Login = () => {
                 body: bodyRequest
             })
             .then((response) => response.json())
-            .then((success) => console.log(success))
+            .then((success) => navigate("/dashboard"))
             .catch((error) => window.alert(error))
         }
     }
